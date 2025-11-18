@@ -24,6 +24,18 @@
                     <div>
                         <h1 class="indexHeader">{{ .Site.Params.author.name }}</h1>
                     </div>
+                    <nav class="headerLinks">
+                      <ul>
+                          {{ range .Site.Menus.header }}
+                          <li>
+                              <a href="{{ .URL | absLangURL }}" title="{{ .Title }}" >
+                                  ~/{{- .Name -}}
+                              </a>
+                          </li>
+                          {{ end }}
+                      </ul>
+                    </nav>
+
                     {{ if not .Site.Params.author.avatarFirst }}
                         {{ partial "avatar.html" . }}
                     {{ end }}
