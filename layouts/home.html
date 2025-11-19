@@ -16,37 +16,70 @@
         {{ partial "header.html" . }}
 
         <div class="content vertical">
-            <main class="main">
-                <div class="indexWrapper">
-                    {{ if .Site.Params.author.avatarFirst }}
-                        {{ partial "avatar.html" . }}
-                    {{ end }}
-                    <div>
-                        <h1 class="indexHeader">{{ .Site.Params.author.name }}</h1>
-                    </div>
-                    <nav class="bodyLinks">
-                      <ul>
-                          {{ range .Site.Menus.header }}
-                          <li>
-                              <a href="{{ .URL | absLangURL }}" title="{{ .Title }}" >
-                                  ~/{{- .Name -}}
-                              </a>
-                          </li>
-                          {{ end }}
-                      </ul>
-                    </nav>
+            <main class="main" id="maindiv">
+                <div class="homeContainer">
+                    <div class="indexWrapper">
+                        {{ if .Site.Params.author.avatarFirst }}
+                            {{ partial "avatar.html" . }}
+                        {{ end }}
+                        <div>
+                            <h1 class="indexHeader">{{ .Site.Params.author.name }}</h1>
+                        </div>
+                        <nav class="bodyLinks">
+                          <ul>
+                              {{ range .Site.Menus.header }}
+                              <li>
+                                  <a href="{{ .URL | absLangURL }}" title="{{ .Title }}" >
+                                      ~/{{- .Name -}}
+                                  </a>
+                              </li>
+                              {{ end }}
+                          </ul>
+                        </nav>
 
-                    {{ if not .Site.Params.author.avatarFirst }}
-                        {{ partial "avatar.html" . }}
-                    {{ end }}
-                    {{ if isset .Site.Params "social" }}
-                        {{ partial "social.html" . }}
-                    {{ end }}
+                        {{ if not .Site.Params.author.avatarFirst }}
+                            {{ partial "avatar.html" . }}
+                        {{ end }}
+                        {{ if isset .Site.Params "social" }}
+                            {{ partial "social.html" . }}
+                        {{ end }}
+                    </div>
+
+                    {{ $posts := where .Site.RegularPages "Section" "posts" }}
+                    {{ $paginator := .Paginate $posts }}
+
+                    <div class="postsListWrapper">
+                        <div role="list">
+                          {{ range $paginator.Pages }}
+                            <div class="postListItem" role="listitem">
+                              <a class="postListLink" href="{{ .Permalink }}">
+                                <div class="postHeader">
+                                  <span class="postTitle">{{ .Title }}</span>
+                                  {{ $layout := .Site.Params.displayDateFormat | default "2006-01-02" }}
+                                  {{ $iso := .Date | time.Format "2006-01-02" }}
+                                  <time class="postDate" datetime="{{ $iso }}">{{ .Date | time.Format $layout }}</time>
+                                </div>
+                                {{ $showReadingTime := true }}
+                                {{ if eq .Site.Params.showReadingTime false }}{{ $showReadingTime = false }}{{ end }}
+                                {{ if eq .Site.Params.readingTime false }}{{ $showReadingTime = false }}{{ end }}
+                                {{ if eq .Params.showReadingTime false }}{{ $showReadingTime = false }}{{ end }}
+                                {{ if $showReadingTime }}
+                                <div class="readingTime">
+                                  {{ i18n "reading_time" }}: {{ i18n "reading_time_desc" .ReadingTime }}
+                                </div>
+                                {{ end }}
+                              </a>
+                              <div class="postExcerpt">
+                                {{ .Summary }}
+                              </div>
+                            </div>
+                          {{ end }}
+                        </div>
+                    </div>
                 </div>
+
             </main>
         </div>
-
-
         {{ partial "footer.html" . }}
     </div>
 

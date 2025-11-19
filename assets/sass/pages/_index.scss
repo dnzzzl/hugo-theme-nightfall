@@ -1,7 +1,37 @@
+@use "../utils/variables" as v;
+
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    @media (min-width: v.$breakLarge) {
+        flex-direction: row;
+        gap: 3rem;
+        align-items: flex-start;
+        .postsListWrapper{
+          margin-top: 20px;
+        }
+    }
+}
+
 .indexWrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex-shrink: 0;
+
+    @media (min-width: v.$breakLarge) {
+        width: 350px;
+        position: sticky;
+        top: 2rem;
+    }
+}
+
+.postsListWrapper {
+    margin-top:0px;
+    flex: 1;
+    min-width: 0;
 }
 
 .indexHeader {
